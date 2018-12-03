@@ -1,0 +1,22 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Motivation for Error Correcting}{}% 2
+\BOOKMARK [1][-]{section.3}{Background}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Terminology}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Types of Errors}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Advantages of EC}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Disadvantages of EC}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{Background on Error Control}{}% 8
+\BOOKMARK [2][-]{subsection.4.1}{The Theory}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.2}{Types of Error Control}{section.4}% 10
+\BOOKMARK [1][-]{section.5}{Block Codes}{}% 11
+\BOOKMARK [2][-]{subsection.5.1}{Simple Error Control Using Redundant Data}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.2}{Hamming Codes \(4, 7\)}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.3}{Encoding and Decoding Hamming Codes}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.4}{Extended Hamming Codes}{section.5}% 15
+\BOOKMARK [1][-]{section.6}{Reed-Solomon Codes}{}% 16
+\BOOKMARK [2][-]{subsection.6.1}{Overview}{section.6}% 17
+\BOOKMARK [2][-]{subsection.6.2}{How Reed-Solomon Codes work}{section.6}% 18
+\BOOKMARK [2][-]{subsection.6.3}{Encoding and Decoding Reed-Solomon Codes}{section.6}% 19
+\BOOKMARK [1][-]{section.7}{Convolutional Codes}{}% 20
+\BOOKMARK [2][-]{subsection.7.1}{Convolution Code Operation}{section.7}% 21
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 22
