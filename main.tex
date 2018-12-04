@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
-\title{A Survey of Error Correcting Codes in Computer Networks}
+\title{
+  CS535A1 Final Project: \\ A Survey of Error Correcting Codes in Computer Networks}
 \author{Daniel Kearney}
 \date{December 2, 2018}
 \usepackage[margin=1in,footskip=0.25in]{geometry}
@@ -25,7 +26,7 @@ Error correcting codes are often discussed in tandem with error detection due to
 
 There are several key scenarios where retransmission is not suitable. For example, networks with a high delay, like a satellite channel or a deep space probe, may have long times in transit and any retransmissions may significantly slow down the overall data rate. \cite{pless} And for particularly noisy channels, like wireless networks, errors may be so common that retransmissions may become extremely common, again, eating into bandwidth as data is endlessly retransmitted. In the worst case, it could become very challenging to send data at all when errors become very common!
 
-Perhaps the most important scenarios for error correction in static media. For example, on a DVD, there is no concept of a retransmission -- if a scratch causes bit errors, those errors are permanent. Server memory, likewise, has no guarantee of being able to be re-computed. In those use cases, error correction is nearly required to prevent data decay over time. \cite{pless}
+Perhaps the most important scenarios for error correction in static media. For example, on a DVD, a retransmission is very difficult -- if a scratch causes bit errors, those errors are permanent. A retransmission means going back to Best Buy and getting a new DVD! Server memory, likewise, has no guarantee of being able to be re-computed. In those use cases, error correction is nearly required to prevent data decay over time. \cite{pless}
 
 Interestingly, there is rudimentary error correction built into the building blocks of life itself! Biological genomes are transcribed into proteins via RNA-amino acid coding. These codes turn triplets of amino acids -- like AUG, CCU, GAG -- into proteins. There are 4 basic amino acids, and so there are 64 possible triplets. However, there are only 20 amino acids. Many amino acids can be transcribed with multiple different triplets. This means that an error in DNA or RNA -- if it does not change the output protein -- can be recovered from harmlessly. While this is not true error correction, this resiliency to error is fascinating. \cite{wolf}
 
@@ -43,15 +44,13 @@ While this helps to understand the upper bounds of what's achievable with error 
 
 There are two main types of error correction codes used in practice. Block codes operate on fixed blocks of data length, while convolutional codes operate more like streams, producing a new set of output bits based on a sliding window lookback. 
 
-Another distinction is hard versus soft decision codes. Hard decision codes definitively state an error occurred; soft decision codes utilize probabilities, saying that an error might have occurred with some probability. Soft decision codes are powerful because they provider richer information about errors. \cite{tanenbaum} 
-
-Convolutional Codes typically are more flexible for allowing soft decisions. \cite{mitvit}
+Another distinction is hard versus soft decision codes. Hard decision codes definitively state an error occurred; soft decision codes utilize probabilities, saying that an error might have occurred with some probability. Soft decision codes are powerful because they provider richer information about errors. \cite{tanenbaum}. Convolutional naturally allow soft decisions. \cite{mitvit}
 
 \subsection{Terminology}
 
 Input data is transformed via error correcting codes into codewords. A codeword is called systematic when the data bits themselves are present in the codewords; they are not systematical if the original data is not present. 
 
-The Hamming distance is defined as the number of components that they are different. The Hamming distance is used to measure how many errors can be corrected or detected for a given code. For example, two codewords with a Hamming distance of one only differ by a single bit. In that case, the two codewords can be shown to have one bit error from each other. Likewise, a Hamming (7, 4) code has a Hamming distance of 3, making it possible to correct one error. An extended Hamming code has a distance of 4, making it possible to correct one error and definitely detect two others. \cite{sphere}
+The Hamming distance is defined as the number of components that they are different. The Hamming distance is used to measure how many errors can be corrected or detected for a given code. For example, two codewords with a Hamming distance of one only differ by a single bit. In that case, the two codewords can be shown to have one bit error from each other. When different correct codes have a high Hamming distance, it means it takes several errors to convert one correct code into another. A Hamming (7, 4) code has a minimal Hamming distance of 3, which makes it possible to correct one error. An extended Hamming code has a distance of 4, making it possible to correct one error and definitely detect two others. \cite{sphere}
 
 \section{Block Codes}
 
@@ -67,7 +66,7 @@ With our naive approach, we see that each bit requires a total of 3 bits to tran
 
 Hamming codes are an improvement over pure redundancy that can correct single-bit errors using some clever math. 
 
-A Hamming code utilizes a series of parity bits on segments of the data bits to verify the correctness of the data bits. When the data is received, the parity bits are re-computed and any discrepancy between the data bits and the parity bits can indicate where the error must be. The data bits and parity bits can best be visualized as a Hamming (7, 4) code, where 3 parity bits are used to help transmit 4 data bits. The data and parity bits are best visualized as a sort of Venn diagram, like the below.
+A Hamming code utilizes a series of parity bits on segments of the data bits to verify the correctness of the data bits. When the data is received, the parity bits are re-computed and any discrepancy between the data bits and the parity bits can indicate where the error must be. The data bits and parity bits can best be visualized as a Hamming (7, 4) code, where 3 parity bits are used to help transmit 4 data bits. The data and parity bits are best visualized as a sort of Venn diagram, like Figure ~\ref{fig:hamming}.
 
 \begin{figure}[h!]
  \centering
@@ -86,7 +85,7 @@ The only other interesting case is if d4 flips, since d4 factors into all three 
 
 \subsection{Encoding and Decoding Hamming Codes}
 
-A Hamming code begins by placing the parity bits at expected locations in the data, at the index powers of 2, so position 1, 2, 4, etc. This property actually shows that for larger Hamming codes, relatively fewer parity bits are required to correct a single error, since the powers of two will increasingly space out. To actually compute a Hamming Code in practice, we use matrix algebra. 
+A Hamming code begins by placing the parity bits at expected locations in the data, at the index powers of 2, so position 1, 2, 4, etc. For a Hamming (7,4) code, the codeword is ultimately $p_1p_2d_1p_3d_2d_3d_4$. This property actually shows that for larger Hamming codes, relatively fewer parity bits are required to correct a single error, since the powers of two will increasingly space out. To actually compute a Hamming Code in practice, we use matrix algebra. 
 
 \begin{figure}[h!]
  \centering
@@ -97,25 +96,25 @@ A Hamming code begins by placing the parity bits at expected locations in the da
 
 If we take $p$ as our initial data, and $x$ as the vector we intend to send, then we do the matrix multiplication $x = Gp$. G is a special matrix called a generator computed for the particular size of the Hamming Code which encapsulated the logic we discussed, computing and inserting the parity bits. This is always the same matrix for all data.
 
-On receipt, we take the received codeword and multiply it by a different special matrix, called a parity check matrix, to get an output syndrome. Mathematically, this is $z = Hr$. $G$ and $H$ are shown in Figure \ref{fig:matrix}. The syndrome Z is will be a null vector if there are no errors, but if there is an error, its value modulo 2 will simply paint out the index of where the error is. We know which bits are the data bits, and so we can extract them, flip up to one error, and extract the transmitted codeword. \cite{wolf}
+On receipt, we take the received codeword and multiply it by a different special matrix, called a parity check matrix, to get an output syndrome. Mathematically, this is $z = Hr$. $G$ and $H$ are shown in Figure \ref{fig:matrix}. The syndrome Z is will be a null vector if there are no errors, but if there is an error, its value modulo 2 will simply paint out the index of where the error is. We know which bits are the data bits, and so we can extract them, flip up to one error, and extract the transmitted codeword. This same approach is used for larger Hamming codes as well, which means that encoding and decoding require nothing more than simple matrix algebra, which itself can be optimized since many operations are done modulo 2. This means that we can achieve high rates of encoding and decoding.\cite{wolf}
 
 \subsection{Extended Hamming Codes}
 
-A limitation of Hamming codes is that they only successfully correct a single bit error, and when multiple errors occur it can be detected because several parity bits will be off, but it is not possible to know exactly how many errors occurred. By adding an additional parity bit to the entire code, it becomes possible to determine if exactly two errors exist, using the same logic as correcting an error, but without the ability to determine exactly which two flipped. For network purposes, this is not particularly useful because any errors will trigger a retransmission, but for certain applications, knowing how many errors occurred can help with things like pinpointing hardware issues.
+A limitation of Hamming codes is that they only successfully correct a single bit error, and when multiple errors occur it can be detected because several parity bits will be off, but it is not possible to know exactly how many errors occurred for a (7, 4) code. By adding an additional parity bit to the entire code, it becomes possible to determine if exactly two errors exist, using the same logic as correcting an error, but without the ability to determine exactly which two flipped. For network purposes, this is not always useful because any number of errors will trigger a retransmission, but it can be useful in other scenarios. \cite{wiki}
 
 \section{Reed-Solomon Codes}
 
 \subsection{Overview}
 
-Hamming Codes are useful for correcting and detecting small numbers of errors. However, there are other classes of error that Hamming codes do not address. Burst errors, in particular, are common in physical media. Scratches on CDs can mess with a long run of data, and a burst of electrical noise can fry several bits in a row. Erasures can also occur if the media is able to communicate that an error has occurred but it is unsure what the correct value is, sort of like an "I don't know", perhaps if the medium detects noise or is able to determine that a value is not a strong 0 or a strong 1.
+Hamming Codes are useful for correcting and detecting single errors. However, there are other classes of error that Hamming codes do not address. Burst errors, in particular, are common in physical media. Scratches on CDs can mess with a long run of data, and a burst of electrical noise can fry several bits in a row. Erasures can also occur if the media is able to communicate that an error has occurred but it is unsure what the correct value is, sort of like an "I don't know", perhaps if the medium detects noise or is able to determine that a value is not a strong 0 or a strong 1.
 
 Reed-Solomon Codes are not a single code, but rather, a class of codes with different implementations that utilize a similar technique. In general, a Reed-Solomon code transforms a batch of bits into a block called a symbol. Each symbol is of a fixed size and therefore has a fixed total range of possible values. Reed-Solomon codes act by transforming the message symbols into values, coefficients, or other descriptor of a polynomial, or some mathematical product of a polynomial. The recipient takes advantage of mathematical properties of polynomials in order to determine which bits were incorrect. With Reed-Solomon, entire symbols are error-corrected. This means that a burst error that introduces noise to a large contiguous chunk of a message may only impact a small number of symbols, which can all then be corrected, making these very suitable for network and physical media applications. \cite{pless}
 
 \subsection{How Reed-Solomon Codes work}
 
-The critical property is that any distinct N points on a polynomial will uniquely determine the polynomial of degree at most N-1, that is, there is only one polynomial of degree N that has the specific N+1 points on it. As an example, how many horizontal lines (0 degree polynomials) go through a single point -- just one. How many lines (first degree polynomial) go through two points -- just one line. How many parabolas go through three points? Exactly one parabola. This continues for all degrees. We can exploit this property by, simplistically, describing a polynomial that fits the data symbols we are sending, and then add extra data points to the polynomial to over-define it, that is, use more symbols than we actually need to uniquely define it. Then, if there are errors, we can tease out which symbols don't match the same polynomial as the rest of the data points, and re-compute the correct point. \cite{tanenbaum}
+The critical property is that any distinct N points on a polynomial will uniquely determine the polynomial of degree at most N-1, that is, there is only one polynomial of degree N that has the specific N+1 points on it. As an example, how many horizontal lines (0 degree polynomials) go through a single point -- just one. How many lines (first degree polynomial) go through two points -- just one line. How many parabolas go through three points -- just one parabola. This continues for all degrees. We can exploit this property by, simplistically, describing a polynomial that fits the data symbols we are sending, and then add extra data points to the polynomial to over-define it, that is, use more symbols than we actually need to uniquely define it. Then, if there are errors, we can tease out which symbols don't match the same polynomial as the rest of the data points, and re-compute the correct point. \cite{tanenbaum}
 
-As an example, take the polynomial below. The 8 points on it uniquely determine a polynomial of degree 7. That polynomial is drawn through the points and can be defined as an expression like $ax + bx^2 + cx^3 + dx^4 + ex^5 + fx^6 + gx^7$.
+As an example, take the polynomial below. We encode 8 symbols into them as points with a fixed spacing. These 8 points uniquely determine a polynomial of degree 7. That polynomial is drawn through the points and can be defined as an expression like $ax + bx^2 + cx^3 + dx^4 + ex^5 + fx^6 + gx^7$.
 
 \begin{figure}[h!]
  \centering
@@ -144,18 +143,18 @@ In transit, two errors occur. They are shown in green in ~\ref{fig:poly3}. Even 
 
  As you can see from this visual example, over-sampling the data enables us to recover the original polynomial, and once we have the original polynomial, it is trivial to re-compute any of the original symbols by simply evaluating the polynomial.
 
-Reed-Solomon codes in practice utilize various techniques related to these. In the original view, Reed-Solomon codes utilized a strategy similar to what I described: the codewords are used as symbols in a polynomial, and all polynomials of degree K are computed for all possible groups of K+1 received symbols. Then, the most "popular" polynomial will be the correct one, since any polynomial that does not have an error will be the same, original one (Reed and Solomon 1960). However, this is tremendously inefficient since there are enormous numbers of combinations for large codes. Clearly we need a better approach.  \cite{rs}
+Reed-Solomon codes in practice utilize various techniques related to these. In the original view, Reed-Solomon codes utilized a strategy similar to what I described: the codewords are used as symbols in a polynomial, and all polynomials of degree K are computed for all possible groups of K+1 received symbols. Then, the most "popular" polynomial will be the correct one, since any polynomial that does not have an error will be the same, original one (Reed and Solomon 1960). However, this is tremendously inefficient since there are enormous numbers of combinations for large codes, so we would be stuck computing endless polynomials to find the most popular. Clearly we need a better approach.  \cite{rs} \cite{wiki}
 
 \subsection{Encoding and Decoding Reed-Solomon Codes}
 
 Reed-Solomon codes are, in practice, transmitted as codewords of N bytes, where there are K data bytes and N-K parity bytes. N-K is also referred to as 2t, as the value $t$ is used in computations. 
 
-A heavily used code is RS(255,223) with symbols of 1 byte length. Codewords are 255 bytes, with 223 bytes as data and 32 bytes for parity. In that example, $n= 255, k = 223, s = 8, 2t = 32, t = 16$. A decoder can then correct up to 16 ($t$) symbol errors. 
+A heavily used code is RS(255,223) with symbols of 1 byte length. Codewords are 255 bytes, with 223 bytes as data and 32 bytes for parity. In that example, $n= 255, k = 223, s = 8, 2t = 32, t = 16$. A decoder can then correct up to 16 (or $t$) symbol errors. 
 
 In practice, Reed-Solomon codes are computed using what's known as a generator polynomial. A generator has the following form. Note that this has degree 2t. 
 
 \begin{equation}
-g(x) = (x-\alpha^i)(x-\alpha^(i+1))(x-\alpha^(i+2)) ... (x-\alpha^(i+2t))
+g(x) = (x-\alpha^i)(x-\alpha^{i+1})(x-\alpha^{i+2}) ... (x-\alpha^{i+2t})
 \end{equation}
 
 The codeword is computed as below: the symbols to transmit, i(x), are multipled by the generator at each index $x$. The codword, then, can be divided by the generator in order to determine the original information.
@@ -167,7 +166,7 @@ g(x) = g(x) * i(x)
 In addition, parity symbols are computed as well. These are computed by 
 
 \begin{equation}
-p(x) = i(x) * x^(n-k)  mod g(x)
+p(x) = i(x) * x^{n-k} \text{mod g}(x)
 \end{equation}
 
 When the codeword is transmitted, there can be errors on the receiving side. The received codwords, r(x), is the transmitted codeword, c(x), plus any errors, e(x)/
@@ -180,7 +179,7 @@ On the receiving end, the receiver must follow a series of steps to determine if
 
 \section{Convolutional Codes}
 
-A different approach to error correction are convolutional codes. Convolutional codes are not block codes because they do not operate on fixed blocks of data; rather, they operate on streams of data, continuously re-calculating the output bit value based on previous inputs. The output is deterministic and any errors will cause the output value to drift and no longer follow the expected summation logic. To correct errors, it is possible to figure out which bit error was the most likely culprit to cause the output sequence.
+A different approach to error correction are convolutional codes. Convolutional codes are not block codes because they do not operate on fixed blocks of data; rather, they operate on streams of data, continuously re-calculating output bit values based on a window of previous bits. The output is deterministic and any errors in transit will cause the output value to no longer follow the expected output that would occur using valid summation logic. To correct errors, it is possible to figure out which bit error was the most likely culprit to cause the output sequence.
 
 Convolutional codes are most useful for detecting single-bit errors on streams of data. They actually work well in tandem with block codes, because block codes like Reed-Solomon can very effectively correct bursts, and convolutional codes can correct single-bit errors.  \cite{tanenbaum}
 
@@ -240,7 +239,7 @@ Using our three-parity-bit equations from before, imagine we receive 11010000000
 1100 & 110010011010 & 6                \\ \hline
 1101 & 110010011100 & 6                \\ \hline
 1110 & 110010101110 & 7                \\ \hline
-\caption{All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely original data.}
+\caption{All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely original	 data.}
 \label{tab:tab}
 \end{longtable}
 
