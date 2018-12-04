@@ -1,13 +1,15 @@
 \documentclass[12pt]{article}
 \title{A Survey of Error Correcting Codes in Computer Networks}
 \author{Daniel Kearney}
-\date{October 30, 2018}
+\date{December 2, 2018}
 \usepackage[margin=1in,footskip=0.25in]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{longtable}
-
+\usepackage[format=plain,
+            labelfont={bf,it},
+            textfont=it]{caption}
 
 \begin{document}
 
@@ -15,13 +17,13 @@
 
 \section{Introduction}
 
-Communication is inherently noisy. From a noisy restaurant to an underwater fiber, the real world does not always cooperate with our attempts to send data. Error correction is a fascinating suite of technologies that allows us to send data through noisy channels and actually recover data that was changed by noise, at the cost of reduced bandwidth. These technologies are particularly critical when sending data over noisy channels like WiFi and physical media like DVDs that can get dirty. In this paper, I present an overview of error correction codes, and discuss a few technologies in detail.
+Communication is inherently noisy. From a noisy restaurant to an undersea fiber, the real world does not always cooperate with our attempts to send clean data. Error correction is a fascinating suite of technologies that allows us to send data through noisy channels and actually recover data that was changed by noise, at the cost of reduced bandwidth. These technologies are particularly critical when sending data over noisy channels like WiFi and physical media like DVDs that can get dirty. In this paper, I present an overview of error correction codes, and discuss a few technologies in detail.
 
 \section{Motivation for Error Correcting}
 
-Error correcting codes are often discussed in tandem with error detection as they are similar. With error detection, a computation (like a checksum) is computed and attached to the data, and the receiver is tasked to compute the same computation; if the result of the computation does not match, then an error must have occurred. At that point, typically, the data would be re-transmitted. Why, then, do we have error correction?
+Error correcting codes are often discussed in tandem with error detection due to their similarities. With error detection, a computation (like a checksum) is computed and attached to the data, and the receiver is tasked to compute the same computation; if the result of the computation does not match, then an error must have occurred. At that point, typically, the data would be re-transmitted. Why, then, do we have error correction?
 
-There are several key scenarios where retransmission is not suitable. For example, networks with a high delay, like a satellite channel or a deep space probe, may have long times in transit and any retransmissions may significantly slow down the overall data rate. (Huffman 1) And for particularly noisy channels, like wireless networks, errors may be so common that retransmissions may become extremely common, again, eating into bandwidth as data is endlessly retransmitted. In the worst case, it could become very challenging to send data at all when errors become very common!
+There are several key scenarios where retransmission is not suitable. For example, networks with a high delay, like a satellite channel or a deep space probe, may have long times in transit and any retransmissions may significantly slow down the overall data rate. \cite{pless} And for particularly noisy channels, like wireless networks, errors may be so common that retransmissions may become extremely common, again, eating into bandwidth as data is endlessly retransmitted. In the worst case, it could become very challenging to send data at all when errors become very common!
 
 Perhaps the most important scenarios for error correction in static media. For example, on a DVD, there is no concept of a retransmission -- if a scratch causes bit errors, those errors are permanent. Server memory, likewise, has no guarantee of being able to be re-computed. In those use cases, error correction is nearly required to prevent data decay over time. \cite{pless}
 
@@ -41,9 +43,9 @@ While this helps to understand the upper bounds of what's achievable with error 
 
 There are two main types of error correction codes used in practice. Block codes operate on fixed blocks of data length, while convolutional codes operate more like streams, producing a new set of output bits based on a sliding window lookback. 
 
-Another distinction is hard versus soft decision codes. Hard decision codes definitively state an error occurred; soft decision codes utilize probabilities, saying that an error might have occurred with some probability. Soft decision codes are powerful because they provider richer information about errors. \cite{mitvit}
+Another distinction is hard versus soft decision codes. Hard decision codes definitively state an error occurred; soft decision codes utilize probabilities, saying that an error might have occurred with some probability. Soft decision codes are powerful because they provider richer information about errors. \cite{tanenbaum} 
 
-Convolutional Codes typically are more flexible for allowing soft decisions.\cite{tanenbaum}
+Convolutional Codes typically are more flexible for allowing soft decisions. \cite{mitvit}
 
 \subsection{Terminology}
 
@@ -53,15 +55,15 @@ The Hamming distance is defined as the number of components that they are differ
 
 \section{Block Codes}
 
-\subsection{Simple Error Control Using Redundant Data}
+\subsection{Simple Error Correction Using Redundant Data}
 
 As a trivial example, imagine trying to send the binary sequence 010101 through a noisy channel that's prone to flipping bits. The simplest mechanism for error detection would be to send each bit twice; therefore if two bits that should agree do not, then one of them has flipped. This however does not help much with error correction, because we don't know which is correct! So the simplest mechanism is to send each bit three times: 000111000111000. This will guarantee that we can correct a single bit error and possibly several, but again, there are no guarantees beyond a single bit error. Obviously, this is a very poor code because we're using 3 bits to send 1 bit of data, which is a lot of overhead. In fact, the lower limit is defined as 
 
 $(m + r + 1) ≤ 2 r (3-1)$ \cite{tanenbaum}
 
-With our naive approach, we see that each bit requires a total of 3 bits to transmit 1 data bit, what we call a rate of 1/3. Hamming 4,7 codes achieve 4/7, Golay 12/23, and other get closer to 1/2. This limit is a consequence of the Shannon limit. \cite{pless}
+With our naive approach, we see that each bit requires a total of 3 bits to transmit 1 data bit, what we call a rate of 1/3. Hamming (7, 4) codes achieve 4/7, Golay 12/23, and other get closer to 1/2. This limit is a consequence of the Shannon limit. \cite{pless}
 
-\subsection{Hamming Codes (4, 7)}
+\subsection{Hamming (7, 4)}
 
 Hamming codes are an improvement over pure redundancy that can correct single-bit errors using some clever math. 
 
@@ -180,11 +182,10 @@ On the receiving end, the receiver must follow a series of steps to determine if
 
 A different approach to error correction are convolutional codes. Convolutional codes are not block codes because they do not operate on fixed blocks of data; rather, they operate on streams of data, continuously re-calculating the output bit value based on previous inputs. The output is deterministic and any errors will cause the output value to drift and no longer follow the expected summation logic. To correct errors, it is possible to figure out which bit error was the most likely culprit to cause the output sequence.
 
-Convolutional codes are most useful for detecting single-bit errors on streams of data. They actually work well in tandem with block codes, because block codes like Reed-Solomon can very effectively correct bursts, and convolutional codes can correct single-bit errors. 
+Convolutional codes are most useful for detecting single-bit errors on streams of data. They actually work well in tandem with block codes, because block codes like Reed-Solomon can very effectively correct bursts, and convolutional codes can correct single-bit errors.  \cite{tanenbaum}
 
-Convolutional codes are used in WiFi to improve reliability. WiFi is highly noisy and so overhead rates of 1/2 to 3/4 (to be discussed below) are used, depending on the data rate. It uses a 6-state shift register. % https://www.hamilton.ie/publications/xiaomin_thesis.pdf  
+Convolutional codes are used in WiFi to improve reliability. WiFi is highly noisy and so overhead rates of 1/2 to 3/4 (to be discussed below) are used, depending on the data rate. It uses a 6-state shift register. \cite{wlan} 
 
-(Tanenbaum 231).
 
 \subsection{Convolution Code Operation}
 
@@ -197,7 +198,7 @@ A visualization is shown below. In the example here, $r$ is 3. The first parity 
 \begin{figure}[h!]
  \centering
  \includegraphics[width=0.5\textwidth]{img/conv.png}
- \caption{An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. Source: } 
+ \caption{An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. \cite{mitconv}} 
  \label{fig:conv}
  \end{figure}
 
@@ -217,13 +218,13 @@ Each parity bit, then, has partial information about each actual data bit, depen
 
 \subsection{Decoding}
 
-Now that we have a suitable mechanism to add redundancy to our data, we need to be able to decode the original data from these. The approach used here is called a maximum likelihood decoder. A maximum likelihood decoder determines the input value that was most likely to produce the output value. With small constraint windows, such as n=4, we can simply try examine what all of the possible output bit streams could be, and then compute the Hamming distance between all of those and the received codeword. The lowest Hamming distance is the maximum likely transmitted data, because it requires the fewest changes.
+Now that we have a suitable mechanism to add redundancy to our data, we need to be able to decode the original data from these. The approach used here is called a maximum likelihood decoder. A maximum likelihood decoder determines the input value that was most likely to produce the output value in the presence of noise. With small constraint windows, such as n=4, we can simply try examine what all of the possible output bit streams could be, and then compute the Hamming distance between all of those and the received codeword. The lowest Hamming distance is the maximum likely transmitted data, because it requires the fewest changes.
 
 Using our three-parity-bit equations from before, imagine we receive 110100000001 as our received codeword for a four-bit constraint window. This is not a valid code. If we manually compute all expected codewords and compute the Hamming distance from each codeword, we can see that the codeword for the input data 1010 only differs by a single bit, and therefore it is maximally likely that it is the case. \cite{rsg}
 
-\begin{longtable}{| p{.20\textwidth} | p{.4\textwidth} | p{.2\textwidth} |} 
+\begin{longtable}{| p{.20\textwidth} | p{.3\textwidth} | p{.3\textwidth} |} 
 \hline
-\textbf{Data} & \textbf{Code}    &     \textbf{Hamming Distance}  \\ \hline
+\textbf{Data} & \textbf{Code}    &     \textbf{Hamming Distance from 110100000001}  \\ \hline
 0000 & 000000000000 & 4                \\ \hline
 0001 & 000000000110 & 6                \\ \hline
 0010 & 000000110100 & 7                \\ \hline
@@ -239,7 +240,7 @@ Using our three-parity-bit equations from before, imagine we receive 11010000000
 1100 & 110010011010 & 6                \\ \hline
 1101 & 110010011100 & 6                \\ \hline
 1110 & 110010101110 & 7                \\ \hline
-\caption{All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely data.}
+\caption{All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely original data.}
 \label{tab:tab}
 \end{longtable}
 
@@ -301,6 +302,10 @@ Reed-Solomon Error Correction. Wikipedia: The Free Encyclopedia. \texttt{https:/
 
 \bibitem{rs}
 Solomon, G. and Reed, I.S. Polynomial Codes Over Certain Finite Fields. Journal of the Society for Industrial and Applied Mathematics, 8(2), 300–304. \texttt{https://epubs.siam.org/doi/10.1137/0108018}
+
+\bibitem{wlan}
+Chen, Xiaomin. Coding in 802.11 WLANs. Hamilton Institute: National University of Ireland Maynooth. September 2012. \texttt{https://www.hamilton.ie/publications/xiaomin\_thesis.pdf
+}
 
 \end{thebibliography}
 

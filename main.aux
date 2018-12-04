@@ -1,12 +1,13 @@
 \relax 
 \citation{pless}
+\citation{pless}
 \citation{wolf}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Motivation for Error Correcting}{1}}
 \citation{pless}
 \citation{tanenbaum}
-\citation{mitvit}
 \citation{tanenbaum}
+\citation{mitvit}
 \citation{sphere}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Background}{2}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Background on Error Control}{2}}
@@ -15,15 +16,17 @@
 \citation{tanenbaum}
 \citation{pless}
 \@writefile{toc}{\contentsline {section}{\numberline {5}Block Codes}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Simple Error Control Using Redundant Data}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Hamming Codes (4, 7)}{3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Left: The basic structure of a Hamming (7, 4) code visualized as a sort of Venn diagram. The data bits, d1 through d4, form the intersections, and the parity bits, p1 through p4. Center: Data bits 0110 and the corresponding parity check bits. Right: A single bit error causes two parity checks to fail, allowing us to discern which bit was flipped.}}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Simple Error Correction Using Redundant Data}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Hamming (7, 4)}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Left: The basic structure of a Hamming (7, 4) code visualized as a sort of Venn diagram. The data bits, d1 through d4, form the intersections, and the parity bits, p1 through p4. Center: Data bits 0110 and the corresponding parity check bits. Right: A single bit error causes two parity checks to fail, allowing us to discern which bit was flipped.\relax }}{3}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:hamming}{{1}{3}}
+\citation{wolf}
 \citation{wiki}
 \citation{wiki}
 \citation{wolf}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Encoding and Decoding Hamming Codes}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The two matrixes used for encoding and decoding Hamming codes in practice, a generator matrix G and a parity check matrix H. \cite  {wiki}}}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The two matrixes used for encoding and decoding Hamming codes in practice, a generator matrix $G$ and a parity check matrix $H$. \cite  {wiki}\relax }}{4}}
 \newlabel{fig:matrix}{{2}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Extended Hamming Codes}{4}}
 \citation{pless}
@@ -32,34 +35,38 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Overview}{5}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}How Reed-Solomon Codes work}{5}}
 \citation{rs}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Eight data symbols are plotted as data points on a polynomial of degree 7. That polynomial is uniquely defined.}}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Eight data symbols are plotted as data points on a polynomial of degree 7. That polynomial is uniquely defined.\relax }}{6}}
 \newlabel{fig:poly1}{{3}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces We add more redundant data points at intervals along the same 7 degree polynomial (blue) along with the data (black) in order to over-define the polynomial.}}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces We add more redundant data points at intervals along the same 7 degree polynomial (blue) along with the data (black) in order to over-define the polynomial.\relax }}{6}}
 \newlabel{fig:poly2}{{4}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Two errors occur in the transmitted data. Because the other data points match the same degree 7 polynomial, the two errors can be identified and corrected.}}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Two errors occur in the transmitted data. Because the other data points match the same degree 7 polynomial, the two errors can be identified and corrected.\relax }}{6}}
 \newlabel{fig:poly3}{{5}{6}}
 \citation{rsg}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Encoding and Decoding Reed-Solomon Codes}{7}}
+\citation{tanenbaum}
+\citation{wlan}
+\citation{mitconv}
+\citation{mitconv}
 \@writefile{toc}{\contentsline {section}{\numberline {7}Convolutional Codes}{8}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Convolution Code Operation}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. Source: }}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. \cite  {mitconv}\relax }}{8}}
 \newlabel{fig:conv}{{6}{8}}
 \citation{rsg}
 \citation{rsg}
 \gdef \LT@i {\LT@entry 
     {1}{105.94957pt}\LT@entry 
-    {1}{199.89914pt}\LT@entry 
-    {1}{105.94957pt}}
+    {1}{152.92793pt}\LT@entry 
+    {1}{152.92793pt}}
 \citation{tanenbaum}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Decoding}{9}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely data.}}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces All possible output codewords for a given 4-bit convolutional decoder. The received codeword, 110100000001, only differs from the codeword for 1010 by 1 bit so we deduce that it is the most likely data.\relax }}{9}}
 \newlabel{tab:tab}{{1}{9}}
 \citation{mitconv}
 \citation{mitconv}
 \citation{mitvit}
 \bibcite{tanenbaum}{1}
 \@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Viterbi Decoding}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. \cite  {mitconv} }}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces An example of a sliding window convolutional code operating on a stream of data. Three data bits are inspected to product two output parity bits. \cite  {mitconv} \relax }}{10}}
 \newlabel{fig:trellis}{{7}{10}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{10}}
 \bibcite{mitconv}{2}
@@ -72,3 +79,4 @@
 \bibcite{wiki}{9}
 \bibcite{rswiki}{10}
 \bibcite{rs}{11}
+\bibcite{wlan}{12}
